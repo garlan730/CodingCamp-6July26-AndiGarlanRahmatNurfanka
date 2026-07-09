@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense & Budget Visualizer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Balance Display -->
+    <header>
+        <div class="balance-container">
+            <span class="balance-label">Total Balance</span>
+            <h1 id="balance">0.00</h1>
+        </div>
+
+        <button id="theme-toggle">
+            🌙
+        </button>
+    </header>
+
+    <main>
+        <!-- Input Form -->
+        <section class="form-section">
+            <form id="input-form">
+                <div class="form-group">
+                    <label for="item-name">Item Name</label>
+                    <input type="text" id="item-name" name="item-name" maxlength="100" placeholder="Enter item name">
+                    <span class="error-msg" role="alert"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0.01" max="999999999.99" placeholder="0.00">
+                    <span class="error-msg" role="alert"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Fun">Fun</option>
+                    </select>
+                    <span class="error-msg" role="alert"></span>
+                </div>
+
+                <button type="submit" id="add-btn">Add Transaction</button>
+            </form>
+
+            <!-- Storage Error Banner -->
+            <div id="storage-error" class="error-banner" role="alert" style="display: none;">
+                <p>Could not save data — storage may be full or unavailable.</p>
+                <button class="dismiss-btn" aria-label="Dismiss error">×</button>
+            </div>
+        </section>
+
+        <!-- Transaction List -->
+        <section class="list-section">
+            <div class="list-header">
+                <h2>Transaction History</h2>
+
+                <select id="sort">
+                    <option value="latest">Latest</option>
+                    <option value="amount">Amount</option>
+                    <option value="category">Category</option>
+                </select>
+            </div>
+            <ul id="transaction-list">
+                <p id="empty-msg">No transactions yet</p>
+            </ul>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <h2>Spending Distribution</h2>
+            <div class="chart-container">
+                <canvas id="chart-canvas" role="img" aria-label="Pie chart showing spending distribution by category"></canvas>
+                <div id="chart-placeholder">No data to display</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- App Script -->
+    <script src="js/app.js"></script>
+</body>
+</html>

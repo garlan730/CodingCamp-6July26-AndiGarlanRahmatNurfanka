@@ -1,0 +1,765 @@
+/* =============================================================================
+   Expense & Budget Visualizer — style.css
+   Mobile-first responsive layout • 320px – 1920px
+   Requirements: 2.2, 6.1
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. CSS Custom Properties
+   ----------------------------------------------------------------------------- */
+:root {
+  /* Colour palette */
+  --color-bg:           #f0f2f5;
+  --color-surface:      #ffffff;
+  --color-border:       #e0e4ea;
+  --color-header-bg:    #1a2637;
+  --color-header-text:  #ffffff;
+  --color-primary:      #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-danger:       #ef4444;
+  --color-danger-dark:  #dc2626;
+  --color-text:         #1e293b;
+  --color-text-muted:   #64748b;
+  --color-success-bg:   #f0fdf4;
+
+  /* Category badge colours */
+  --color-food:       #fdba74;
+  --color-food-text:  #7c2d12;
+  --color-transport:  #93c5fd;
+  --color-transport-text: #1e3a5f;
+  --color-fun:        #c4b5fd;
+  --color-fun-text:   #3b0764;
+
+  /* Typography */
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+               Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --font-size-xs:   0.75rem;   /* 12px */
+  --font-size-sm:   0.875rem;  /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg:   1.125rem;  /* 18px */
+  --font-size-xl:   1.25rem;   /* 20px */
+  --font-size-2xl:  1.5rem;    /* 24px */
+  --font-size-3xl:  2rem;      /* 32px */
+  --font-size-4xl:  2.5rem;    /* 40px */
+
+  /* Spacing scale */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+
+  /* Borders & shadows */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-pill: 9999px;
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.10);
+
+  /* Layout */
+  --header-height: 72px;
+  --container-max: 1280px;
+  --list-max-height-mobile: 320px;
+  --list-max-height-desktop: 420px;
+}
+
+/* -----------------------------------------------------------------------------
+   2. CSS Reset & Base
+   ----------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* Prevent horizontal scroll at any viewport width */
+  overflow-x: hidden;
+  /* Smooth font rendering */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100dvh;
+  /* Prevent horizontal overflow caused by any child element */
+  overflow-x: hidden;
+}
+
+/* -----------------------------------------------------------------------------
+   3. Typography helpers
+   ----------------------------------------------------------------------------- */
+h1, h2, h3 {
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+/* -----------------------------------------------------------------------------
+   4. Header / Balance Display
+   ----------------------------------------------------------------------------- */
+header {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-6);
+  padding-bottom: 10px;
+  padding-top: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20);
+}
+
+.balance-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.balance-label {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    /* margin-bottom: var(--space-1); */
+}
+
+@media (min-width: 480px) {
+  header::before {
+    display: inline;
+  }
+}
+
+#balance {
+  font-size: clamp(var(--font-size-2xl), 5vw, var(--font-size-4xl));
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  /* Prevent the number from clipping on tiny viewports */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-top: 0px;
+  
+}
+
+/* -----------------------------------------------------------------------------
+   5. Main grid container
+   ----------------------------------------------------------------------------- */
+main {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+
+  /* Mobile: single column stacked */
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "form"
+    "list"
+    "chart";
+  gap: var(--space-6);
+}
+
+/* -----------------------------------------------------------------------------
+   6. Shared section card style
+   ----------------------------------------------------------------------------- */
+.form-section,
+.list-section,
+.chart-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  /* Prevent children from breaking out of the card */
+  overflow: hidden;
+  min-width: 0;  /* Required for grid children to respect text-overflow */
+}
+
+.form-section {
+  grid-area: form;
+  padding: var(--space-6);
+}
+
+.list-section {
+  grid-area: list;
+  padding: var(--space-6);
+  /* Flex column so the list can fill remaining space and scroll */
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-section {
+  grid-area: chart;
+  padding: var(--space-6);
+}
+
+.list-section h2,
+.chart-section h2 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   7. Input Form
+   ----------------------------------------------------------------------------- */
+#input-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.form-section h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-5);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.03em;
+}
+
+.form-group input,
+.form-group select {
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  /* Prevent inputs from exceeding their container on small screens */
+  width: 100%;
+  min-width: 0;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.form-group input::placeholder {
+  color: #b0bac5;
+}
+
+/* Inline validation error messages */
+.error-msg {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  font-weight: 500;
+  min-height: 1.2em;  /* Reserve space so the form doesn't jump */
+  display: block;
+  line-height: 1.4;
+}
+
+/* Submit button */
+#add-btn {
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.1s ease;
+  width: 100%;
+}
+
+#add-btn:hover {
+  background-color: var(--color-primary-dark);
+}
+
+#add-btn:active {
+  transform: scale(0.98);
+}
+
+#add-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   8. Storage Error Banner  (#storage-error)
+   ----------------------------------------------------------------------------- */
+#storage-error {
+  margin-top: var(--space-4);
+  background-color: #fff5f5;
+  border: 1.5px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+#storage-error p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-danger-dark);
+  line-height: 1.5;
+}
+
+.dismiss-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: var(--font-size-xl);
+  line-height: 1;
+  color: var(--color-danger);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.dismiss-btn:hover {
+  color: var(--color-danger-dark);
+}
+
+/* Backwards-compat: .error-banner is the class on the element in HTML */
+.error-banner {
+  /* Same rules as #storage-error — covered above via ID selector */
+}
+
+/* -----------------------------------------------------------------------------
+   9. Transaction List  — Requirement 2.2, 6.1
+   ----------------------------------------------------------------------------- */
+
+/* The <ul> is the scrollable region.
+   max-height + overflow-y: auto fulfils Requirement 2.2:
+   list scrolls without affecting balance / chart / form layout.            */
+
+   .list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  gap: var(--space-3);
+  
+}
+
+#sort {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  width: 150px;
+  padding: 5px
+}
+
+#transaction-list {
+  list-style: none;
+  flex: 1 1 auto;                  /* Grow within the flex .list-section */
+  max-height: var(--list-max-height-mobile);
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Subtle inset shadow to signal scrollability */
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  /* Custom scrollbar (webkit) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+#transaction-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#transaction-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#transaction-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+/* Empty state placeholder */
+#empty-msg {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+/* Individual transaction row */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  /* Prevent row content from overflowing the container */
+  min-width: 0;
+  overflow: hidden;
+  transition: background-color 0.12s;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item:hover {
+  background-color: #f8fafc;
+}
+
+/* ---
+   .tx-name — Requirement 2.1 + design spec:
+   overflow:hidden + white-space:nowrap + text-overflow:ellipsis
+   max-width: 100ch enforces 100-char visual truncation.
+   flex:1 + min-width:0 lets the text shrink without pushing other columns.
+--- */
+.tx-name {
+  flex: 1 1 auto;
+  min-width: 0;                  /* Critical: allows flex child to shrink */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100ch;              /* Enforces ~100-character visual limit */
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* Amount column — fixed width so it never wraps or shrinks away */
+.tx-amount {
+  flex: 0 0 auto;
+  min-width: 72px;
+  text-align: right;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* Category badge */
+.tx-category {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  /* Default colours (overridden per category below) */
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+/* Per-category colour overrides */
+.tx-category[data-category="Food"],
+.tx-category:not([data-category]) /* text-based fallback */ {
+  /* applied via JS class or text content — use attribute selectors */
+}
+
+/* Text-content–based category colouring
+   (app.js sets textContent = tx.category, no extra attribute needed)   */
+li.transaction-item:has(.tx-category) .tx-category {
+  /* Base reset — colour assigned by specific rules below */
+}
+
+/* Specific category colours via :has or general sibling trick.
+   Since the category text is set dynamically, we rely on the text value.
+   The safest cross-browser approach for text content is data attributes,
+   but app.js does not set them. We use the more-compatible workaround of
+   a dedicated class or we scope the badge colour by text content heuristic.
+   Best approach: target via :not / attribute selectors won't work for text
+   content in CSS — so we provide a visually distinct neutral badge and let
+   JS add a modifier class. Since task.md says we must NOT modify app.js in
+   this task, we provide a neutral badge plus document the hook.             */
+
+/* --------------------------------------------------------------------------
+   NOTE: If app.js ever adds class="tx-category food" / "transport" / "fun",
+   the following rules will activate automatically.
+   -------------------------------------------------------------------------- */
+.tx-category.food,
+span.tx-category[class*="food"] {
+  background-color: var(--color-food);
+  color: var(--color-food-text);
+}
+
+.tx-category.transport,
+span.tx-category[class*="transport"] {
+  background-color: var(--color-transport);
+  color: var(--color-transport-text);
+}
+
+.tx-category.fun,
+span.tx-category[class*="fun"] {
+  background-color: var(--color-fun);
+  color: var(--color-fun-text);
+}
+
+/* Delete button */
+.delete-btn {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-3);
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1.5px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.delete-btn:hover {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.delete-btn:focus-visible {
+  outline: 3px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   10. Chart Section
+   ----------------------------------------------------------------------------- */
+.chart-container {
+  position: relative;
+  width: 100%;
+  /* Fixed aspect-ratio container prevents layout thrash */
+  aspect-ratio: 1 / 1;
+  max-height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#chart-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#chart-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-4);
+}
+
+/* When Chart.js hides the canvas, hidden attribute is set */
+#chart-canvas[hidden],
+#chart-canvas[style*="display: none"] {
+  display: none !important;
+}
+
+/* When placeholder is hidden (hidden attribute set by renderChart) */
+#chart-placeholder[hidden] {
+  display: none;
+}
+
+/* -----------------------------------------------------------------------------
+   11. Responsive Breakpoints — mobile-first
+   ----------------------------------------------------------------------------- */
+
+/* --- 480px: slightly larger phones / landscape phones ---------------------- */
+@media (min-width: 480px) {
+  main {
+    padding: var(--space-6) var(--space-6);
+  }
+
+  #transaction-list {
+    max-height: 360px;
+  }
+}
+
+/* --- 640px: large phones / small tablets ---------------------------------- */
+@media (min-width: 640px) {
+  main {
+    padding: var(--space-8) var(--space-6);
+    gap: var(--space-8);
+  }
+
+  .transaction-item {
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .tx-name {
+    font-size: var(--font-size-base);
+  }
+
+  .tx-amount {
+    font-size: var(--font-size-base);
+    min-width: 88px;
+  }
+
+  .tx-category {
+    font-size: var(--font-size-xs);
+    padding: var(--space-1) var(--space-4);
+  }
+}
+
+/* --- 768px: tablets — two-column layout: form | list, chart full-width ---- */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "form"
+    "list"
+    "chart";
+
+  gap: var(--space-6);
+}
+
+
+/* --- 1280px: wide desktops — more breathing room -------------------------- */
+@media (min-width: 1280px) {
+  main {
+    padding: var(--space-8) var(--space-10);
+    gap: var(--space-8);
+  }
+}
+
+/* --- 1536px: ultra-wide — cap container, increase padding ----------------- */
+@media (min-width: 1536px) {
+  main {
+    padding: var(--space-10) var(--space-8);
+  }
+}
+
+/* --- 1920px: 4K / very wide monitors ------------------------------------- */
+@media (min-width: 1920px) {
+  :root {
+    --container-max: 1440px;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   12. Accessibility — focus & motion
+   ----------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Skip-link (if added in future) */
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: var(--space-4);
+  z-index: 9999;
+  background: var(--color-primary);
+  color: #fff;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+/* -----------------------------------------------------------------------------
+   13. Utility — visually hidden (screen-reader only)
+   ----------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.large-expense {
+    border-left: 6px solid red;
+    background: #fff2f2;
+}
+
+#theme-toggle {
+    position: absolute;
+    right: 20px;
+
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+body.dark {
+    --color-bg: #111827;
+    --color-surface: #1f2937;
+    --color-border: #374151;
+    --color-text: #f9fafb;
+    --color-text-muted: #d1d5db;
+    --color-header-bg: #030712;
+}
+
+body.dark .large-expense {
+    background: #3b1d1d;
+    border-left: 6px solid #ef4444;
+}
+
+
+
+
+/* -----------------------------------------------------------------------------
+   End of style.css
+   ============================================================================= */
