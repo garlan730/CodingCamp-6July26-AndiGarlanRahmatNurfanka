@@ -205,8 +205,8 @@ Possible future enhancements include:
 
 Aspiring Frontend Developer with a background in Business Management and Quantitative Market Research, currently transitioning into software engineering and building projects with JavaScript, HTML, and CSS.
 
-- GitHub: [https://github.com/yourusername](https://github.com/garlan730)
-- LinkedIn: [https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/andi-garlan/)
+- GitHub: [https://github.com/garlan730](https://github.com/garlan730)
+- LinkedIn: [https://linkedin.com/in/andi-garlan/](https://www.linkedin.com/in/andi-garlan/)
 
 ---
 
